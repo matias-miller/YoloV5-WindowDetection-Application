@@ -50,7 +50,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/output_title"
+        android:id="@+id/textview"
         android:text="Output: "
         android:textSize="21sp"
         android:layout_marginTop="24dp"
@@ -66,7 +66,7 @@
         android:text="Result here"
         android:textSize="21sp"
         android:textColor="@android:color/holo_red_dark"
-        app:layout_constraintStart_toEndOf="@id/output_title"
+        app:layout_constraintStart_toEndOf="@id/textview"
         app:layout_constraintTop_toBottomOf="@id/btn_capture_image"
         android:layout_marginTop="24dp" />
 
