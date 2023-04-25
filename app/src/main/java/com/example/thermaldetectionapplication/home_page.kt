@@ -83,15 +83,6 @@ public class Home : Fragment(R.layout.home_page) {
 
     }
 
-    private fun loadModelFile(modelPath: String, assetManager: AssetManager): ByteBuffer {
-        val assetFileDescriptor = assetManager.openFd(modelPath)
-        val inputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
-        val fileChannel = inputStream.channel
-        val startOffset = assetFileDescriptor.startOffset
-        val declaredLength = assetFileDescriptor.declaredLength
-        return fileChannel.map(FileChannel.MapMode.READ_ONLY, startOffset, declaredLength)
-    }
-
     //request camera permission
     private val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()){granted->
         if (granted) {
@@ -105,7 +96,7 @@ public class Home : Fragment(R.layout.home_page) {
     private val takePicturePreview = registerForActivityResult(ActivityResultContracts.TakePicturePreview()){bitmap->
         if (bitmap != null) {
             imageView.setImageBitmap(bitmap)
-            //outputGenerator(bitmap)
+            outputGenerator(bitmap)
         }
     }
 
@@ -135,7 +126,7 @@ public class Home : Fragment(R.layout.home_page) {
     private fun outputGenerator(bitmap: Bitmap) {
         Thread {
             // Load the TFLite model from file
-            val tfliteModel = loadModelFile("ThermalDetectionModelMediumV2.tflite", requireContext())
+            val tfliteModel = loadModelFile("small16-fp16.tflite", requireContext())
 
             // Load the TFLite interpreter from the model
             val options = Interpreter.Options()
@@ -179,7 +170,7 @@ public class Home : Fragment(R.layout.home_page) {
 
             // Classify the output tensor as positive or negative
             val score = outputTensor.floatArray[0]
-            val prediction = if (score >= 0.01) "Window" else "Not a window"
+            val prediction = if (score >= 0.007) "Window" else "Not a window"
 
             // Display the prediction in the UI
             requireActivity().runOnUiThread {
